@@ -1,7 +1,8 @@
 const express =  require('express');
 const app =  express();
 const {userAuth,adminAuth} = require('./middleware/auth')
-
+const connectDb = require('./config/database')
+const User =  require('./model/user')
 // to handle request
 
 // app.use('/hello',(req,res) => {
@@ -24,18 +25,54 @@ const {userAuth,adminAuth} = require('./middleware/auth')
 //     res.send({firstname: "Pooja", lastName:"devi"})
 // })
 
+connectDb().then( () => {
+    console.log('Database connected successfully')// when database is connected then start your app
+    app.listen(3000,(req, res) => {
+        console.log("app is running on 3000")
+    })
+}).catch((error) => {
+    console.error('error in connecting database',error)
+})
+
+app.use(express.json()) // important one for req.nody post
 app.get('/user/login', userAuth, (req, res) => {
    res.send('user data sent')
 })
 
-app.get('/user/data', userAuth, (req, res) => {
-    res.send('user data sent')
+app.post('/signup', async (req, res) => {
+    try {
+        // const user =  new User ({
+        //     "firstName": "pooja",
+        //     "lastName": "bhard",
+        //     "emailId": "test@123",
+        //     "password": r"!343434
+        // })
+        const user =  new User(req.body)
+        const response = await user.save();
+        console.log('response',response)
+        res.send({error:false, msg: 'user added successfully'})
+    } catch(e) {
+        console.log('exception',e)
+        res.send({error: true})
+    }
+ })
+ 
+ // feed API -> get all the users from database
+
+
+ app.get('/users', async (req, res) => {
+
+ });
+
+// get user by email id  or // get user by id
+ app.get('/user', async (req, res) => {
+    try {
+        const userEmail = req.body.emailId
+        const result = await User.find({emailId:userEmail})
+        res.send(result)
+    } catch(e) {
+        res.send('error')
+    }
  })
 
- app.get('/admin/getAllData', adminAuth, (req, res) => {
-    res.send('user data sent')
- })
 
-app.listen(3000,(req, res) => {
-    console.log("app is running on 3000")
-})
