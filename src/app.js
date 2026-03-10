@@ -1,5 +1,6 @@
 const express =  require('express');
 const app =  express();
+const {userAuth,adminAuth} = require('./middleware/auth')
 
 // to handle request
 
@@ -19,9 +20,21 @@ const app =  express();
 //     res.send('server give response')
 //   })
 
-app.get("/user/:userId/:name/:password", (req, res) => {
-    res.send({firstname: "Pooja", lastName:"devi"})
+// app.get("/user/:userId/:name/:password", (req, res) => {
+//     res.send({firstname: "Pooja", lastName:"devi"})
+// })
+
+app.get('/user/login', userAuth, (req, res) => {
+   res.send('user data sent')
 })
+
+app.get('/user/data', userAuth, (req, res) => {
+    res.send('user data sent')
+ })
+
+ app.get('/admin/getAllData', adminAuth, (req, res) => {
+    res.send('user data sent')
+ })
 
 app.listen(3000,(req, res) => {
     console.log("app is running on 3000")
