@@ -25,3 +25,12 @@ Install Mongoose library
 Connect your application to database
 Call connect db function before starting application
 Create a User schema and User Model
+
+// mongoosejs.com
+
+Difference between patch and put 
+Explore Mongoose Documentation for Model Methods
+What are the options in Model.findOneAndUpdate method
+// update user with email
+// Improve DB schema
+// explore more validation on schema dn email validation as well

@@ -88,9 +88,9 @@ app.post('/signup', async (req, res) => {
  // update user data
 
 
- app.patch("/user", async (req, res) => {
+ app.patch("/user/:userId", async (req, res) => {
     try {
-        const userId =  req.body.userId
+        const userId =  req.params.userId
         const bodyParams =  req.body;
         const result =  await User.findByIdAndUpdate(userId, bodyParams, {returnDocument: "before"})
         // const result =  await User.findByIdAndUpdate({_id: userId}, bodyParams, {returnDocument: "before"})
