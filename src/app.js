@@ -3,7 +3,14 @@ const app =  express();
 const {userAuth,adminAuth} = require('./middleware/auth')
 const connectDb = require('./config/database')
 const User =  require('./model/user')
-// to handle request
+const {validateSignUpData} =  require('./utils/validator')
+const bcrypt = require('bcrypt')
+const cookieParser =  require("cookie-parser")
+const jwt =  require("jsonwebtoken")
+const scretKey = 'devProject@345'
+const expiryDate = new Date(Date.now() + 8 * 3600000); //  // 8 hour from now
+
+ // to handle request
 
 // app.use('/hello',(req,res) => {
 //     res.send('Hello from server')
@@ -35,25 +42,53 @@ connectDb().then( () => {
 })
 
 app.use(express.json()) // important one for req.nody post
+app.use(cookieParser())
+
+
 app.get('/user/login', userAuth, (req, res) => {
    res.send('user data sent')
 })
 
 app.post('/signup', async (req, res) => {
     try {
-        // const user =  new User ({
-        //     "firstName": "pooja",
-        //     "lastName": "bhard",
-        //     "emailId": "test@123",
-        //     "password": r"!343434
-        // })
-        const user =  new User(req.body)
+        validateSignUpData(req)
+        const {firstName, lastName, emailId, password} = req.body;
+        const encryptedPassword = await bcrypt.hash(password, 10)
+        const user =  new User({
+            firstName,
+            lastName,
+            emailId,
+            password: encryptedPassword
+        })
         const response = await user.save();
-        console.log('response',response)
         res.send({error:false, msg: 'user added successfully'})
     } catch(exception) {
         console.log('exception',exception)
         res.send({error: true, msg: exception})
+    }
+ })
+
+
+ app.post('/login', async (req, res) => {
+    try {
+        const {emailId, password}  = req.body
+        const user = await User.findOne({emailId})
+        if (!user) {
+           throw new Error ("Invalid credentials")
+        }
+        const isPasswordValid =  await bcrypt.compare(password, user.password)
+        if (isPasswordValid) {
+            // create s JWT token
+            // const token =  jwt.sign({_id: user._id}, scretKey,{expiresIn:"7d"}) // {expiresIn : 1d} // 1 day
+            // console.log('user',user.getJWT())
+            const token =  user.getJWT() // {expiresIn : 1d} // 1 day
+            res.cookie('token',token, { expires: expiryDate }) // in production always use res.cookie('token',token,{ expires: expiryDate, httpOnly: true) // alway send expire also in cookie 
+            res.send("Login Successfull")
+        } else {
+           throw new Error ("Invalid Credentials s")
+        }
+    } catch(e) {
+        res.status(400).send("ERROR: "+e.message)
     }
  })
  
@@ -86,8 +121,6 @@ app.post('/signup', async (req, res) => {
  });
 
  // update user data
-
-
  app.patch("/user/:userId", async (req, res) => {
     try {
         const userId =  req.params.userId
@@ -98,6 +131,24 @@ app.post('/signup', async (req, res) => {
     } catch(exception) {
         res.send({error: true, msg:exception})
     }
+ })
+
+ // get Profile
+ app.get('/profile', userAuth, async (req, res) => {
+    try {
+        const user =  req.user;
+        res.send(user)
+    } catch(err) {
+        res.status(400).send("ERROR: "+err.message)
+    }
+ })
+
+ // sendconnection request
+app.post('/sendConnectionRequest', userAuth, async (req, res) => { 
+    console.log('sending a connection request');
+    const user = req.user;
+
+    res.send(user.firstName +' sent connection request successfully')
  })
 
 

@@ -6,7 +6,7 @@ Play with routes and route extenstion /hello ,/hellow/2
 Order of the routes matters the most
 install postman app and make test api call
 Write logic to handle POST/PATH/PUT/GET/DELETE
-Explore routing and use of ?,+,(),* in the routes
+Explore routing and use of ?,+,(),* in the routes (https://expressjs.com/en/guide/routing.html)
 Use of regex in routes
 Reading the query params in routes
 Reading the dynamic routes
@@ -34,3 +34,8 @@ What are the options in Model.findOneAndUpdate method
 // update user with email
 // Improve DB schema
 // explore more validation on schema dn email validation as well
+jwt.io
+password encption
+JWT token
+create login API and send the cookie back
+create profile API

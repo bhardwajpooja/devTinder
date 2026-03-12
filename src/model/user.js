@@ -1,4 +1,7 @@
 const mongoose = require('mongoose')
+const jwt =  require("jsonwebtoken")
+const scretKey = 'devProject@345'
+const expiryDate = new Date(Date.now() + 8 * 3600000); 
 
 const userSchema = mongoose.Schema(
     {
@@ -52,4 +55,18 @@ const userSchema = mongoose.Schema(
     }
 )
 
+userSchema.methods.getJWT = async function() {
+  const user =  this
+  const token =  jwt.sign({_id: user._id}, scretKey,{expiresIn:"7d"})
+  return token
+}
+
+userSchema.methods.validatePassword = async function(passwordInputbyUser) {
+    const user =  this;
+    const isPasswordValid =  await bcrypt.compare(passwordInputbyUser, user.password)
+    return isPasswordValid
+}
+
+
+//console.log('userSchema',userSchema)
 module.exports = mongoose.model("users", userSchema)
