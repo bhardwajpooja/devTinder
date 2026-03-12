@@ -8,7 +8,7 @@ POST /logout
 -- Profile Router
 GET /profile/view
 PATCH /profile/edit
-PATCH /profile/password
+PATCH /profile/password // forget API password
 
 
 -- Connection Request 
