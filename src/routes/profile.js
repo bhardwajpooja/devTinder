@@ -26,4 +26,15 @@ profileRouter.get('/profile/edit', userAuth, async (req, res) => {
     }
 })
 
+// forget passwor API
+profileRouter.patch('/profile/password', async (req, res) => {
+    try{
+        // whethee user is logged in or loggout it
+        // take password , save in database after validating pasword
+    } catch(exception) {
+        console.log('exception',exception)
+        res.status(400).send("ERROR: "+err.message)
+    }
+})
+
 module.exports = profileRouter
