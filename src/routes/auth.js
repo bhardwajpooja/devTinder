@@ -40,7 +40,7 @@ authRouter.post('/signup', async (req, res) => {
             const token =  await user.getJWT() // {expiresIn : 1d} // 1 day
             console.log('token____',token)
             res.cookie('token',token, { expires: expiryDate }) // in production always use res.cookie('token',token,{ expires: expiryDate, httpOnly: true) // alway send expire also in cookie 
-            res.send(user)
+            res.send({msg: 'logged in successfully',data: user})
         } else {
            throw new Error ("Invalid Credentials s")
         }
