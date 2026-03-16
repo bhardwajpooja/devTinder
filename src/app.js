@@ -10,6 +10,22 @@ const cookieParser =  require("cookie-parser")
 const authRouter =  require('./routes/auth');
 const connectionRequestRouter = require('./routes/connectionRequest');
 const profile = require('./routes/profile');
+const request = require('./routes/request');
+const users = require('./routes/users');
+const cors =  require('cors');
+
+app.use(express.json()) // important one for req.nody post
+app.use(cookieParser())
+app.use(cors({
+    "origin":"http://localhost:5173",
+    "credentials":true
+})); // cross origin platform
+
+app.use("/", authRouter)
+app.use("/", connectionRequestRouter)
+app.use("/", request)
+app.use("/", profile)
+app.use("/", users)
 
  // to handle request
 
@@ -41,14 +57,6 @@ connectDb().then( () => {
 }).catch((error) => {
     console.error('error in connecting database',error)
 })
-
-app.use(express.json()) // important one for req.nody post
-app.use(cookieParser())
-
-
-app.use("/", authRouter)
-app.use("/", connectionRequestRouter)
-app.use("/", profile)
 
 app.get('/user/login', userAuth, (req, res) => {
    res.send('user data sent')

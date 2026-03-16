@@ -39,3 +39,9 @@ password encption
 JWT token
 create login API and send the cookie back
 create profile API
+
+// Why do we need index in db
+// compund index
+
+// pre connection schema
+// ref and populate in mongo db
