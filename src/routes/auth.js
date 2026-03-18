@@ -32,6 +32,7 @@ authRouter.post('/signup', async (req, res) => {
         if (!user) {
            throw new Error ("Invalid credentials")
         }
+        console.log('coming here kya 123')
         const isPasswordValid =  await bcrypt.compare(password, user.password)
         if (isPasswordValid) {
             // create s JWT token
