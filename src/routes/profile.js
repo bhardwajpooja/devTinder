@@ -15,7 +15,7 @@ const {validateEditProfileData} =  require('../utils/validator')
 })
 
 
-profileRouter.get('/profile/edit', userAuth, async (req, res) => {
+profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
     try {
         validateEditProfileData(req.body)
         const loggedInUser = req.user;

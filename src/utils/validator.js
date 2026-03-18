@@ -13,10 +13,10 @@ const validateSignUpData =  (req) => {
 }
 
 const validateEditProfileData =  (body) => {
-    const allowedEditFields = ["firstName", "lastName", "emailId", "photoUrl", "gender", "age","skills"]
+    const allowedEditFields = ["firstName", "lastName", "emailId", "photoUrl", "gender", "age","skills","about"]
     const isEditAllowed = Object.keys(body).every((field) => allowedEditFields.includes(field))
     if (!isEditAllowed) {
-        throw new Error ("Please pass valida input fields")
+        throw new Error ("Please pass valid input fields")
     }
     return
 }
